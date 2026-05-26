@@ -133,4 +133,4 @@ git push origin main
 ## 参照
 
 - 親ルール: `/Users/m.yoshida/CLAUDE.md`
-- GitHub リポジトリ: `https://github.com/ユーザー名/procurement-tool`
+- GitHub リポジトリ: `https://github.com/freedom00guant-star/procurement-tool`
