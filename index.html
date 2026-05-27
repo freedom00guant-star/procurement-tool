@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>調達進捗管理支援ツール</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>📦 調達進捗管理支援ツール</h1>
+    <p class="subtitle">案件情報を入力するだけで、状態分類・確認事項・催促メールを自動生成します</p>
+  </header>
+
+  <main>
+
+    <!-- APIキー設定 -->
+    <section class="card" id="api-section">
+      <h2>🔑 Anthropic API キー設定</h2>
+      <p class="note">キーはこのブラウザにのみ保存されます。外部に送信されません。</p>
+      <div class="input-row">
+        <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." />
+        <button id="save-key-btn">保存</button>
+        <button id="clear-key-btn" class="secondary">クリア</button>
+      </div>
+      <p id="key-status" class="status-msg"></p>
+    </section>
+
+    <!-- 案件情報入力 -->
+    <section class="card">
+      <h2>📋 案件情報入力</h2>
+      <p class="note">発注日・納期・発注先・現状メモなどを自由に入力してください</p>
+      <textarea id="case-input" rows="10" placeholder="例）
+【案件名】半導体部品（型番：ABC-2024）調達
+【発注日】2026年4月10日
+【納期】2026年5月30日
+【発注先】株式会社テクノサプライ 担当：田中様
+【発注数量】500個
+
+【現状メモ】
+5月19日に確認メールを送ったが7日間未返信。
+前回電話でも「確認中」との回答のみ。
+在庫状況不明。6月2日から生産ライン稼働予定。"></textarea>
+      <div class="btn-row">
+        <button id="analyze-btn" class="primary">🔍 分析する</button>
+        <button id="sample-btn" class="secondary">サンプルを入力</button>
+        <button id="clear-btn" class="secondary">クリア</button>
+      </div>
+    </section>
+
+    <!-- ローディング -->
+    <div id="loading" class="hidden">
+      <div class="spinner"></div>
+      <p>AI が分析中です…</p>
+    </div>
+
+    <!-- エラー -->
+    <div id="error-box" class="hidden card error-card">
+      <p id="error-msg"></p>
+    </div>
+
+    <!-- 結果表示 -->
+    <section id="result-section" class="hidden">
+
+      <div class="result-header">
+        <h2>📊 分析結果</h2>
+        <button id="copy-btn" class="secondary">📋 全文コピー</button>
+      </div>
+
+      <!-- ① 状態分類 -->
+      <div class="card result-card">
+        <h3>① 状態分類</h3>
+        <p id="r-status" class="status-badge"></p>
+      </div>
+
+      <!-- ② 根拠 -->
+      <div class="card result-card">
+        <h3>② 根拠（引用）</h3>
+        <p id="r-basis"></p>
+      </div>
+
+      <!-- ③ 催促レベル -->
+      <div class="card result-card">
+        <h3>③ 催促レベル</h3>
+        <p id="r-urgency" class="urgency-badge"></p>
+      </div>
+
+      <!-- ④ 確認事項 -->
+      <div class="card result-card">
+        <h3>④ 今回確認事項</h3>
+        <ol id="r-checks"></ol>
+      </div>
+
+      <!-- ⑤ 作成メール -->
+      <div class="card result-card">
+        <h3>⑤ 作成メール</h3>
+        <p class="label">件名</p>
+        <p id="r-subject" class="subject-box"></p>
+        <p class="label">本文</p>
+        <pre id="r-body" class="mail-body"></pre>
+        <button class="copy-mail-btn secondary" data-target="r-body" data-subject="r-subject">📋 このメールをコピー</button>
+      </div>
+
+      <!-- ⑥ 安全補正後メール -->
+      <div class="card result-card">
+        <h3>⑥ 安全補正後メール <span class="badge-soft">クレーム回避</span></h3>
+        <p class="label">件名</p>
+        <p id="r-safe-subject" class="subject-box"></p>
+        <p class="label">本文</p>
+        <pre id="r-safe-body" class="mail-body"></pre>
+        <button class="copy-mail-btn secondary" data-target="r-safe-body" data-subject="r-safe-subject">📋 このメールをコピー</button>
+      </div>
+
+      <!-- ⑦ 社内共有要約 -->
+      <div class="card result-card">
+        <h3>⑦ 社内共有要約</h3>
+        <p id="r-summary" class="summary-box"></p>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <p>調達進捗管理支援ツール — Powered by Claude API</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

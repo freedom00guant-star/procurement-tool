@@ -1,5 +1,7 @@
 # APIキー（絶対にコミットしない）
 .env
+.env.save
+.env.local
 
 # 分析結果ファイル（自動生成）
 result_*.txt
